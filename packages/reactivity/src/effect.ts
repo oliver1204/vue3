@@ -163,7 +163,7 @@ export function trigger(target, type, key?, newValue?, oldValue?, oldTarget?) {
         break;
     }
   }
-
+  // 将deps展平
   let effects = [];
   for (const dep of deps) {
     effects.push(...dep);

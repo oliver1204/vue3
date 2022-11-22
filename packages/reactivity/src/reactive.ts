@@ -64,9 +64,6 @@ function createReactiveObject(
 export function reactive(target: object) {
   return createReactiveObject(target, false, mutableHandlers, reactiveMap);
 }
-export function toReactive(value) {
-  return isObject(value) ? reactive(value) : value;
-}
 
 export function readonly(target) {
   return createReactiveObject(target, true, readonlyHandlers, readonlyMap);
@@ -86,4 +83,7 @@ export function shallowReadonly(target) {
     shallowReadonlyHandlers,
     shallowReadonlyMap
   );
+}
+export function toReactive(value) {
+  return isObject(value) ? reactive(value) : value;
 }

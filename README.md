@@ -124,7 +124,7 @@ pnpm install @vue/shared@workspace --filter @vue/reactivity
 
 ### rollup配置
 
-```json
+```js
 import path from 'path';
 // 获取packages目录
 const packagesDir = path.resolve(__dirname, 'packages');
@@ -145,7 +145,7 @@ const outputConfigs = {
     global: {
         file: resolve(`dist/${name}.global.js`),
         format: 'iife'
-生产环境
+//生产环境
 } }
 // 获取formats
 const packageFormats = process.env.FORMATS &&
