@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="../dist/reactivity.global.js"></script>
+    <script>
+        const { reactive, effect, computed ,ref} = VueReactivity;
+        let obj = { name: 'olifer', age: 13, address: 'xxx' };
+
+        // 基本类型我们可以使用ref 将他变成一个包装对象
+        const state = ref(0); // defineProperty
+        effect(()=>{
+            console.log(state.value)
+        })
+        setTimeout(()=>{
+            state.value = {}
+            console.log(state.value)
+        },1000)
+    </script>
+</body>
+
+</html>
+

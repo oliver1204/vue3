@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="../dist/reactivity.global.js"></script>
+    <script>
+        const { reactive, effect, computed } = VueReactivity;
+        let obj = { name: 'olifer', age: 13, address: 'xxx' };
+        const state = reactive(obj);
+
+        // 1. 计算属性是一个effect  dirty = true;
+        // 2. 计算属性的依赖属性会收集这个effect
+        // 3.计算属性具备依赖收集的功能，会收集对应effect方法 
+
+        // 4.第一执行effect 时会取computed的值 dirty = true;
+        // 此时多次执行会走缓存
+
+        // 5.计算属性依赖的值发生变化了， dirty = true; 触发计算属性收集的effect
+
+        // 在次取计算属性的值 因为dirty为true 会重新计算
+
+        // 计算属性默认不会执行
+        const myAge = computed({ // 类中的属性访问器
+            get() { // 计算属性的缓存 (dirty)
+                return state.age + 18;
+            },
+            set(value) { // 依赖收集是取值的时候收集，set不需要
+                console.log(value)
+            }
+        })
+        effect(() => {
+            // 计算属性本身不会变化
+            console.log(myAge.value)
+            console.log(myAge.value)
+            console.log(myAge.value)
+        })
+        setTimeout(() => {
+            state.age = 20;
+            state.age = 21;
+        }, 1000)
+
+
+        // console.log(myAge)
+        // // 需要通过.value 取到计算属性的值
+        // myAge.value
+        // myAge.value
+        // myAge.value
+
+        // // 如果依赖的值没有发生变化 不会重新执行
+        // myAge.value = 'abc'
+
+
+    </script>
+</body>
+
+</html>
+
+// 像将effect放到全局上 -》 取属性 -》 会让属性收集这个effect
+// 数据变化后会重新执行对应的effect方法

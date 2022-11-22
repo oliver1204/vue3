@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="../dist/runtime-dom.global.js"></script>
+    <script>
+        let { createApp, h, ref } = VueRuntimeDOM; // VueRuntimeDOM -> VueRuntimeCore -> reactivity
+        function useCounter() {
+            const count = ref(0);
+            const add = () => {
+                count.value++;
+            }
+            return { count, add }
+        }
+        let App = {
+            props: {
+                title: {}
+            },
+            // compostionAPI  reactive ref computed
+            setup(props, ctx) {
+                // let { count, add } = useCounter()
+                // setup 可以返回render函数 ， 或者可以返回渲染所需要的数据结果
+                // return () => { // 组件的渲染函数 ， 默认渲染组件时会调用次函数
+                //     return h('h1', { onClick: add }, 'hello olifer' + count.value)
+                // }
+                // return {
+                //     count,
+                //     add
+                // }
+                let flag = ref(true);
+                setTimeout(() => {
+                    flag.value = !flag.value
+                }, 1000);
+                return {
+                    flag
+                }
+            },
+            // 每次更新重新调用render方法  this.
+            render(proxy) {
+                return this.flag.value ?
+                    h('div', {},
+                        [
+                            h('li', { key: 'a' }, 'a'),
+                            h('li', { key: 'b' }, 'b'),
+                            h('li', { key: 'c' }, 'c'),
+                            h('li', { key: 'd' }, 'd'),
+                            h('li', { key: 'e' }, 'e'),
+
+                            h('li', { key: 'Q' }, 'Q'),
+                            h('li', { key: 'f' }, 'f'),
+                            h('li', { key: 'g' }, 'g'), // e1 = 6
+
+                        ]) :
+                    h('div', {},
+                        [
+                            h('li', { key: 'a' }, 'a'),
+                            h('li', { key: 'b' }, 'b'),
+                            h('li', { key: 'e' }, 'e'),
+                            h('li', { key: 'c' }, 'c'),
+                            h('li', { key: 'd' }, 'd'),
+                            h('li', { key: 'h' }, 'h'),
+                            h('li', { key: 'f' }, 'f'),
+                            h('li', { key: 'g' }, 'g'),// e2 = 7
+
+                        ])
+                // i  e1  e2     2  4 5
+
+                // 看一下 i 和 e2 的关系 如果 e2 比i小 说明 老的多新的少
+                // i 和 e1 之间的就是要删除的
+
+
+                // 看i和e1 之间的关系 如果i 大于 e1  说明有新增的元素  √
+                // i和 e2 之间的内容就是新增的  √
+                // return h('h1', { onClick:this.add,title:proxy.title,style:{color:'red'} }, h('span',['world',h('a','xxxx')]) ,this.count.value)
+            }
+        }
+
+        let app = createApp(App, { title: 'olifer', a: 1 });
+        app.mount('#app');
+
+    </script>
+</body>
+
+</html>
